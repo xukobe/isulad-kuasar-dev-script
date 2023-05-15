@@ -45,8 +45,9 @@ echo y | lvcreate --wipesignatures y -n thinpoolmeta $group -l 1%VG
 lvconvert -y --zero n -c 512K --thinpool $group/thinpool --poolmetadata $group/thinpoolmeta
 lvchange --metadataprofile ${group}-thinpool $group/thinpool
 lvs -o+seg_monitor
-exit 0
 
 sed -i "s/\"storage\-driver\"\: \"overlay2\"/\"storage\-driver\"\: \"devicemapper\"/g" $isulad_daemon_file
 sed -i "/    \"storage-opts\"\: \[/{n;d}" $isulad_daemon_file
 sed -i "/    \"storage-opts\"\: \[/a\    \"dm\.thinpooldev\=\/dev\/mapper\/$group\-thinpool\",\n    \"dm\.fs\=ext4\"\,\n    \"dm\.min\_free\_space\=10\%\"" $isulad_daemon_file
+
+exit 0

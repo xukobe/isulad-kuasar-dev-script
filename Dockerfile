@@ -150,8 +150,8 @@ WORKDIR /home/openeuler
 RUN rm -rf socat-1.7.4.4 socat-1.7.4.4.tar.gz
 
 # Install some scripts as shortcuts
-COPY start-sandboxer /usr/local/bin
-COPY kill-sandboxer /usr/local/bin
+COPY data/start-sandboxer /usr/local/bin
+COPY data/kill-sandboxer /usr/local/bin
 RUN chmod a+x /usr/local/bin/start-sandboxer
 RUN chmod a+x /usr/local/bin/kill-sandboxer
 
