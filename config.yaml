@@ -1,0 +1,23 @@
+# Global
+# eg. http://192.168.0.1:7890
+proxy: "172.17.0.1:7890"
+
+######## Config for docker image build ########
+# Force build docker image every time
+force_build: false
+# Docker image name
+tag_name: "openeuler/kuasar:latest"
+
+######## Config for running a container ########
+# Workspace which will be mounted into container
+workspace: "/workspace"
+# Virtual block image for creating devicemapper
+block_img: "/workspace/kuasar_env.img"
+# Size of the above image (MB)
+block_size: 5000
+# Loop device to mount block image
+loop: "/dev/loop123"
+# LVM group name for devicemapper
+group: "isulad0"
+# Container name for development environment
+name: "kuasar_env"

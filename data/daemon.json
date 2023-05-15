@@ -1,0 +1,50 @@
+{
+    "group": "isula",
+    "default-runtime": "lcr",
+    "graph": "/var/lib/isulad",
+    "state": "/var/run/isulad",
+    "engine": "lcr",
+    "sandboxers": {
+        "kuasar": {
+            "address": "/run/vmm-sandboxer.sock",
+            "controller": "proxy",
+            "protocol": "grpc"
+        }
+    },
+    "cri-runtimes": {
+        "kuasar": "io.containerd.kuasar.v1"
+    },
+    "log-level": "DEBUG",
+    "pidfile": "/var/run/isulad.pid",
+    "log-opts": {
+        "log-file-mode": "0600",
+        "log-path": "/var/lib/isulad",
+        "max-file": "1",
+        "max-size": "30KB"
+    },
+    "log-driver": "stdout",
+    "container-log": {
+        "driver": "json-file"
+    },
+    "hook-spec": "/etc/default/isulad/hooks/default.json",
+    "start-timeout": "2m",
+    "storage-driver": "overlay2",
+    "storage-opts": [
+        "overlay2.override_kernel_check=true"
+    ],
+    "registry-mirrors": [
+        "docker.mirrors.ustc.edu.cn",
+        "registry.cn-hangzhou.aliyuncs.com",
+        "docker.io"
+    ],
+    "insecure-registries": [
+    ],
+    "pod-sandbox-image": "mirrorgcrio/pause-arm64:3.2",
+    "native.umask": "secure",
+    "network-plugin": "",
+    "cni-bin-dir": "",
+    "cni-conf-dir": "",
+    "image-layer-check": false,
+    "use-decrypted-key": true,
+    "insecure-skip-verify-enforce": false
+}

@@ -1,0 +1,5 @@
+runtime-endpoint: unix:///var/run/isulad.sock
+image-endpoint: unix:///var/run/isulad.sock
+timeout: 2
+debug: true
+pull-image-on-create: false

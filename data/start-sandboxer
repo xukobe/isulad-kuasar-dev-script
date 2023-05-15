@@ -1,0 +1,2 @@
+#/bin/bash
+RUST_LOG=debug vmm-sandboxer --listen /run/vmm-sandboxer.sock --dir /kuasar > /var/log/vmm-sandboxer.log 2>&1 &
