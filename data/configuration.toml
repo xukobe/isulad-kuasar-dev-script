@@ -12,7 +12,7 @@
 
 [hypervisor.qemu]
 path = "/usr/bin/qemu-kvm"
-kernel = "/var/lib/kuasar/vmlinux.bin"
+kernel = "/var/lib/kuasar/kernel"
 initrd = "/var/lib/kuasar/kuasar.initrd"
 #image = "/usr/share/kata-containers/kata-containers.img"
 machine_type = "pc"

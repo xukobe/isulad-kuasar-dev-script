@@ -39,6 +39,9 @@ RUN dnf install -y systemd-devel systemd
 # dependency for run isulad
 RUN dnf install -y glibc-all-langpacks dbus udev
 
+# dependency for development
+RUN dnf install -y gdb
+
 ########################################################
 
 #################### Kuasar Dependency ####################
@@ -127,7 +130,7 @@ RUN rm -rf kuasar
 
 # Install kuasar
 RUN mkdir -p /var/lib/kuasar
-COPY images/vmlinux.bin /var/lib/kuasar/vmlinux.bin
+COPY images/kernel /var/lib/kuasar/kernel
 COPY images/kuasar.initrd /var/lib/kuasar/kuasar.initrd
 RUN mkdir -p /usr/share/defaults/kata-containers
 COPY data/configuration.toml /usr/share/defaults/kata-containers/configuration.toml
