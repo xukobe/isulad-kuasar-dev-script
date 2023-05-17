@@ -27,6 +27,8 @@ loop: "/dev/loop123"
 group: "isulad0"
 # Container name for development environment
 name: "kuasar_env"
+# Container name for development environment
+vmm_task: ""
 """
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -81,7 +83,7 @@ def run_container(config):
                 '-p', config.get('proxy'), '-w', config.get('workspace'),
                 '-b', config.get('block_img'), '-s', str(config.get('block_size')),
                 '-l', config.get('loop'), '-g', config.get('group'),
-                '-i', config.get('tag_name')]
+                '-i', config.get('tag_name'), '-t', config.get("vmm_task")]
     process = subprocess.run(cmd_list, universal_newlines=True)
     if process.returncode != 0:
         print('Run container failed!')
@@ -99,8 +101,18 @@ def main():
     # check if container is already exist
     if not run_container(config):
         return
+    print('############ Tips ############')
     print('Now you can enter the container by running:')
     print('docker exec -it {} /bin/bash'.format(config.get('name')))
+    print('')
+    print('To start sandboxer in container:')
+    print('start-sandboxer')
+    print('')
+    print('To stop vmm sandboxer in container:')
+    print('kill-sandboxer')
+    print('')
+    print('To start isuald in container:')
+    print('isulad')
 
 if __name__ == '__main__':
     main()

@@ -1,10 +1,10 @@
 # Global
 # eg. http://192.168.0.1:7890
-proxy: "172.17.0.1:7890"
+proxy: ""
 
 ######## Config for docker image build ########
 # Force build docker image every time
-force_build: false
+force_build: true
 # Docker image name
 tag_name: "openeuler/kuasar:latest"
 
@@ -12,7 +12,7 @@ tag_name: "openeuler/kuasar:latest"
 # Workspace which will be mounted into container
 workspace: "/workspace"
 # Virtual block image for creating devicemapper
-block_img: "/workspace/kuasar_env.img"
+block_img: "/kuasar_env.img"
 # Size of the above image (MB)
 block_size: 5000
 # Loop device to mount block image
@@ -21,3 +21,5 @@ loop: "/dev/loop123"
 group: "isulad0"
 # Container name for development environment
 name: "kuasar_env"
+# Container name for development environment
+vmm_task: ""

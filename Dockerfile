@@ -40,7 +40,7 @@ RUN dnf install -y systemd-devel systemd
 RUN dnf install -y glibc-all-langpacks dbus udev
 
 # dependency for development
-RUN dnf install -y gdb
+RUN dnf install -y gdb cpio
 
 ########################################################
 
@@ -52,6 +52,7 @@ RUN dnf install -y qemu
 WORKDIR /home/openeuler
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
+RUN rustup target add x86_64-unknown-linux-musl
 ########################################################
 
 #################### Env setup ####################

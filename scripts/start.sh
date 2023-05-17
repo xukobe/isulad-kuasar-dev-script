@@ -11,6 +11,7 @@ image="openeuler/kuasar:latest"
 loop="/dev/loop235"
 name="kuasar_env"
 group="isulad"
+vmm_task_binary=""
 script_dir=$(dirname $0)
 
 function err { echo "$@" >&2; }
@@ -27,10 +28,11 @@ function usage() {
     echo "    -l, --loop        Loop device for device mapper."
     echo "    -g, --group       LVM group."
     echo "    -i, --image       Docker image for development."
+    echo "    -t, --task        vmm-task binary."
     echo "    -h, --help        Script help information"
 }
 
-args=`getopt -o n:p:w:b:s:l:g:i:h --long name:,proxy:,workspace:,block:,size:,loop:,group:,image:,help -- "$@"`
+args=`getopt -o n:p:w:b:s:l:g:i:t:h --long name:,proxy:,workspace:,block:,size:,loop:,group:,image:,task:,help -- "$@"`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 eval set -- "$args"
 
@@ -66,6 +68,10 @@ while true ; do
             ;;
         -i|--image)
             image=$2
+            shift 2
+            ;;
+        -t|--task)
+            vmm_task_binary=$2
             shift 2
             ;;
         -h|--help)
@@ -146,7 +152,32 @@ else
     setup_loop_device $loop $block_img
 fi
 
-# This script is used to start docker container.
-docker run $proxy_option -itd --rm --privileged --tmpfs /run --tmpfs /tmp --name $name -v /lib/modules:/lib/modules -v /dev:/dev $workspace_option $image
+# Start docker container.
+docker run $proxy_option -itd --rm --privileged --tmpfs /run:exec,mode=777 --tmpfs /tmp:exec,mode=777 --name $name -v /lib/modules:/lib/modules -v /dev:/dev --sysctl net.ipv6.conf.all.disable_ipv6=0 $workspace_option $image
+if [[ $? -ne 0 ]] ; then
+    err "Failed to start docker container $name."
+    exit 1
+fi
+
+# Create device mapper
 docker cp $script_dir/create_device_mapper.sh $name:/root
 docker exec -it $name bash /root/create_device_mapper.sh $loop $group
+if [[ $? -ne 0 ]] ; then
+    err "Failed to create device mapper $loop."
+    exit 1
+fi
+
+# Replace vmm-task in initrd image
+docker cp $script_dir/replace_vmm_task.sh $name:/root
+if [[ ! -z $vmm_task_binary ]] ; then
+    docker cp $vmm_task_binary $name:/root/vmm-task
+    docker exec -it $name bash /root/replace_vmm_task.sh -i /var/lib/kuasar/kuasar.initrd -b /root/vmm-task
+    if [[ $? -ne 0 ]] ; then
+        err "Failed to replace vmm-task in initrd image."
+    fi
+else
+    docker exec -it $name bash /root/replace_vmm_task.sh -i /var/lib/kuasar/kuasar.initrd
+    if [[ $? -ne 0 ]] ; then
+        err "Failed to replace vmm-task in initrd image."
+    fi
+fi
