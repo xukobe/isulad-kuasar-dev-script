@@ -2,7 +2,7 @@
 This repo provides scripts for deploying iSulad-Kuasar development environment.
 
 ## Config
-Config config.yaml by following the comments inside.
+Config config.yaml by following the comments.
 
 ## Deploy the environment
 ```bash
@@ -11,5 +11,5 @@ sudo python deploy.py
 
 ## Destroy the environment
 ```bash
-sudo destroy.py
+sudo python destroy.py
 ```
